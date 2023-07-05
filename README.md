@@ -1,2 +1,2 @@
-# jenkins-opensips
-CI/CD for jenkins opensips
+# Jenkins
+Sipp calling using Opensips Server
