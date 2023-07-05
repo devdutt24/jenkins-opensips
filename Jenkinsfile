@@ -2,7 +2,7 @@ pipeline {
 
   environment {
     registry = "chetangautamm/repo"
-    registryCredential = '58881f31-29bb-48a8-9da9-fc254654146d' 
+    registryCredential = 'dockerhub' 
     dockerImage = ""
   }
 
@@ -12,7 +12,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/chetangautamm/jenkins-opensips.git'
+        git 'https://github.com/devdutt24/jenkins-opensips.git'
       }
     }
     
@@ -20,16 +20,16 @@ pipeline {
     stage('Deploy APP') {
       steps {
         sh "chmod +x configure.sh"
-        sshagent(['k8suser']) {
-          sh "scp -o StrictHostKeyChecking=no -q opensips.yaml k8suser@52.172.221.4:/home/k8suser"
-          sh "scp -o StrictHostKeyChecking=no -q configure.sh k8suser@52.172.221.4:/home/k8suser"
+        sshagent(['kindk8s']) {
+          sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@16.171.139.4:/home/ubuntu"
+          sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@16.171.139.4:/home/ubuntu"
           script {
             try {
-              sh "ssh k8suser@52.172.221.4 kubectl apply -f opensips.yaml"
+              sh "ssh ubuntu@16.171.139.4 kubectl apply -f opensips.yaml"
             }catch(error){
-              sh "ssh k8suser@52.172.221.4 kubectl apply -f opensips.yaml"
+              sh "ssh ubuntu@16.171.139.4 kubectl apply -f opensips.yaml"
             } 
-            sh "ssh k8suser@52.172.221.4 ./configure.sh"
+            sh "ssh ubuntu@16.171.139.4 ./configure.sh"
           }
         }              
       }
