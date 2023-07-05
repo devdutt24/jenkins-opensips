@@ -23,8 +23,7 @@ pipeline {
           sh "scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@13.53.42.203:/home/ubuntu"
           script {
             try {
-              sh "ssh ubuntu@13.53.42.203 "
-              sh "kubectl apply -f opensips.yaml --context kind-kind"
+              sh "ssh ubuntu@13.53.42.203 kubectl apply -f opensips.yaml --context kind-kind"
             }catch(error){
               sh "ssh ubuntu@13.53.42.203 kubectl apply -f opensips.yaml --context kind-kind"
             } 
