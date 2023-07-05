@@ -20,7 +20,7 @@ pipeline {
     stage('Deploy Oensips Server') {
       steps {
         sshagent(['kindk8s']) {
-          sh "scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@13.53.42.203:/home/ubuntu"
+          sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@13.53.42.203:/home/ubuntu"
           script {
             try {
               sh "ssh ubuntu@13.53.42.203 kubectl apply -f opensips.yaml --context kind-kind"
