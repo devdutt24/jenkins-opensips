@@ -5,7 +5,7 @@ pipeline {
     registryCredential = 'dockerhub' 
     dockerImage = ""
 
-    K8S_ADDRESS = "16.171.144.121"
+    K8S_ADDRESS = "16.171.143.188"
   }
 
   agent any
