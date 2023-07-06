@@ -4,6 +4,8 @@ pipeline {
     registry = "chetangautamm/repo"
     registryCredential = 'dockerhub' 
     dockerImage = ""
+
+    K8S_ADDRESS = "16.171.144.121"
   }
 
   agent any
@@ -20,12 +22,12 @@ pipeline {
     stage('Deploy Oensips Server') {
       steps {
         sshagent(['kindk8s']) {
-          sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@16.170.232.61:/home/ubuntu"
+          sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@$K8S_ADDRESS:/home/ubuntu"
           script {
             try {
-              sh "ssh ubuntu@16.170.232.61 kubectl apply -f opensips.yaml --context kind-kind"
+              sh "ssh ubuntu@$K8S_ADDRESS kubectl apply -f opensips.yaml --context kind-kind"
             }catch(error){
-              sh "ssh ubuntu@16.170.232.61 kubectl apply -f opensips.yaml --context kind-kind"
+              sh "ssh ubuntu@$K8S_ADDRESS kubectl apply -f opensips.yaml --context kind-kind"
             } 
           }
         }              
@@ -34,12 +36,12 @@ pipeline {
        stage('Deploy User Agent Server(UAS)') {
       steps {
         sshagent(['kindk8s']) {
-          sh "scp -o StrictHostKeyChecking=no -q uas.yaml ubuntu@16.170.232.61:/home/ubuntu"
+          sh "scp -o StrictHostKeyChecking=no -q uas.yaml ubuntu@$K8S_ADDRESS:/home/ubuntu"
           script {
             try {
-              sh "ssh ubuntu@16.170.232.61 kubectl apply -f uas.yaml --context kind-kind"
+              sh "ssh ubuntu@$K8S_ADDRESS kubectl apply -f uas.yaml --context kind-kind"
             }catch(error){
-              sh "ssh ubuntu@16.170.232.61 kubectl apply -f uas.yaml --context kind-kind"
+              sh "ssh ubuntu@$K8S_ADDRESS kubectl apply -f uas.yaml --context kind-kind"
             } 
           }
         }              
@@ -48,12 +50,12 @@ pipeline {
        stage('Deploy User Agent Client(UAC)') {
       steps {
         sshagent(['kindk8s']) {
-          sh "scp -o StrictHostKeyChecking=no -q uac.yaml ubuntu@16.170.232.61:/home/ubuntu"
+          sh "scp -o StrictHostKeyChecking=no -q uac.yaml ubuntu@$K8S_ADDRESS:/home/ubuntu"
           script {
             try {
-              sh "ssh ubuntu@16.170.232.61 kubectl apply -f uac.yaml --context kind-kind"
+              sh "ssh ubuntu@$K8S_ADDRESS kubectl apply -f uac.yaml --context kind-kind"
             }catch(error){
-              sh "ssh ubuntu@16.170.232.61 kubectl apply -f uac.yaml --context kind-kind"
+              sh "ssh ubuntu@$K8S_ADDRESS kubectl apply -f uac.yaml --context kind-kind"
             } 
           }
         }              
@@ -63,9 +65,9 @@ pipeline {
       steps {
         sh "chmod +x configure.sh"
         sshagent(['kindk8s']) {
-          sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@16.170.232.61:/home/ubuntu"
+          sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@$K8S_ADDRESS:/home/ubuntu"
           script {
-            sh "ssh ubuntu@16.170.232.61 ./configure.sh"
+            sh "ssh ubuntu@$K8S_ADDRESS ./configure.sh"
           }
         }              
       }
