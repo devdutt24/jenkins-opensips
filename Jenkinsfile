@@ -63,6 +63,7 @@ pipeline {
     }
        stage('Running Call using Opensips Server , UAS & UAC') {
       steps {
+        sleep 300
         sh "chmod +x configure.sh"
         sshagent(['kindk8s']) {
           sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@$K8S_ADDRESS:/home/ubuntu"
