@@ -5,7 +5,7 @@ pipeline {
     registryCredential = 'dockerhub' 
     dockerImage = ""
 
-    K8S_ADDRESS = "16.171.143.188"
+    K8S_ADDRESS = "16.170.232.89"
   }
 
   agent any
@@ -61,14 +61,17 @@ pipeline {
         }              
       }
     }
-       stage('Running Call using Opensips Server , UAS & UAC') {
+     stage('Verifying Pod Deploymeny') {
       steps {
-        sleep 300
-        sh "chmod +x configure.sh"
         sshagent(['kindk8s']) {
-          sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@$K8S_ADDRESS:/home/ubuntu"
+          echo "Please wait pods are creating...."
+          sleep 300
           script {
-            sh "ssh ubuntu@$K8S_ADDRESS ./configure.sh"
+            try {
+              sh "ssh ubuntu@$K8S_ADDRESS kubectl get pods -n default --context kind-kind"
+            }catch(error){
+              sh "ssh ubuntu@$K8S_ADDRESS kubectl get pods -n default --context kind-kind"
+            } 
           }
         }              
       }
