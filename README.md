@@ -1,2 +1,2 @@
 # Jenkins
-Sipp calling using Opensips Server
+Automated CI/CD Pipeline 
